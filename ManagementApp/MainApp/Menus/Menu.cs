@@ -11,10 +11,10 @@ public class Menu
     {
         Console.Clear();
         Console.WriteLine("Main Menu");
-        Console.WriteLine("1. Create Customer");
-        Console.WriteLine("2. View All Customers");
-        Console.WriteLine("3. View Single Customer");
-        Console.WriteLine("4. Delete Customer");
+        Console.WriteLine("1. Create Product");
+        Console.WriteLine("2. View All Products");
+        Console.WriteLine("3. View Single Product");
+        Console.WriteLine("4. Delete Product");
         Console.Write("\nEnter your choice: ");
 
         var option = Console.ReadLine();
@@ -45,6 +45,11 @@ public class Menu
     }
 
     internal ResultStatus AddToList(Product product)
+    {
+        throw new NotImplementedException();
+    }
+
+    internal ResultStatus DeleteProduct(string product)
     {
         throw new NotImplementedException();
     }

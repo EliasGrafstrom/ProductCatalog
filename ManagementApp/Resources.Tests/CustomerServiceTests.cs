@@ -4,21 +4,26 @@ using Resources.Services;
 
 namespace Resources.Tests;
 
-public class CustomerServiceTests
+public class ProductServiceTests
 {
     [Fact]
-    public void AddToList_ShouldReturnSuccess_WhenCustomerAddedToList()
+    public void AddToList_ShouldReturnSuccess_WhenProductAddedToList()
     {
         // arrange
-        Customer customer = new Customer { Name = "Hans", Email = "hans@domain.com", Phone = "073-123 12 12" };
-        CustomerService customerService = new CustomerService();
+        Product product = new Product { Name = "abc", Price = Convert.ToDecimal(123.123)};
+        ProductService productService = new ProductService();
 
         // act
-        ResultStatus result = customerService.AddToList(customer);
-        var customerList = customerService.GetAllCustomers();
+        ResultStatus result = productService.AddToList(product);
+        var productList = productService.GetAllProducts();
 
         // assert
         Assert.Equal(ResultStatus.Success, result);
-        Assert.Single(customerList);
+        Assert.Single(productList);
+        Assert.Equal("abc", productList.First().Name);
+        Assert.Equal(Convert.ToDecimal(123.123), productList.First().Price);
+
+        //cleanup
+        File.Delete(Path.Combine(AppContext.BaseDirectory, "file.json"));
     }
 }

@@ -1,9 +1,14 @@
-﻿namespace Resources.Models;
-
-public class Product
+﻿namespace Resources.Models
 {
-    public string Id { get; set; } = Guid.NewGuid().ToString();
-    public string Name { get; set; } = null!;
-    public decimal Price { get; set; }
+    public class Product
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public decimal Price { get; set; }
 
+        public Product()
+        {
+            Id = Guid.NewGuid();
+        }
+    }
 }

@@ -9,19 +9,18 @@ public class ProductService
     private static readonly string _filePath = Path.Combine(AppContext.BaseDirectory, "file.json");
     private readonly FileService _fileService = new FileService(_filePath);
     private List<Product> _productList = new List<Product>();
-    private decimal price;
 
-    public ResultStatus AddToList(Product Product)
+    public ResultStatus AddToList(Product product)
     {
         try
         {
             GetProductsFromFile();
 
-            if (_productList.Any(c => c.Price == Product.Price))
+            if (_productList.Any(c => c.Name.Equals(product.Name, StringComparison.OrdinalIgnoreCase)))
                 return ResultStatus.Exists;
 
-            _productList.Add(Product);
-            
+            _productList.Add(product);
+
             var json = JsonConvert.SerializeObject(_productList, Formatting.Indented);
             var result = _fileService.SaveToFile(json);
             if (result)
@@ -41,36 +40,39 @@ public class ProductService
         return _productList;
     }
 
-    public Product GetProduct(string email)
+    public Product GetProduct(string name)
     {
-        GetProductsFromFile();     
+        GetProductsFromFile();
         try
         {
-            var Product = _productList.FirstOrDefault(c => c.Price == price);
-            return Product ?? null!;
+            // Search by name
+            var product = _productList.FirstOrDefault(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            return product ?? null!;
         }
-        catch 
+        catch
         {
             return null!;
         }
     }
 
-    public ResultStatus DeleteProduct(string email)
+    public ResultStatus DeleteProduct(string name)
     {
         try
         {
             GetProductsFromFile();
-            var Product = GetProduct(email);
+            var product = GetProduct(name);
 
-            if (Product == null)
+            if (product == null)
                 return ResultStatus.NotFound;
 
-            _productList.Remove(Product);
+            _productList.Remove(product);
 
             var json = JsonConvert.SerializeObject(_productList, Formatting.Indented);
             var result = _fileService.SaveToFile(json);
             if (result)
+            {
                 return ResultStatus.Success;
+            }
 
             return ResultStatus.SuccessWithErrors;
         }
@@ -80,7 +82,7 @@ public class ProductService
         }
     }
 
-    public void GetProductsFromFile()
+    private void GetProductsFromFile()
     {
         try
         {
@@ -91,7 +93,4 @@ public class ProductService
         }
         catch { }
     }
-
-
-
 }
